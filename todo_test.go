@@ -1,6 +1,11 @@
 package todo
 
-import "testing"
+import (
+	"bytes"
+	"encoding/json"
+	"os"
+	"testing"
+)
 
 func TestAdd(t *testing.T) {
 	list := List{}
@@ -29,4 +34,29 @@ func TestComplete(t *testing.T) {
 	if !list[0].Done {
 		t.Errorf("Task should be done")
 	}
+}
+
+func TestSave(t *testing.T) {
+	list := List{}
+	task := "take out garbage"
+	list.Add(task)
+
+	js, err := json.Marshal(list)
+	if err != nil {
+		t.Fatalf("%q", err.Error())
+	}
+
+	if err := list.Save("tasks.json"); err != nil {
+		t.Fatalf("Tried saving file, got %q instead", err)
+	}
+
+	file, err := os.ReadFile("tasks.json")
+	if err != nil {
+		t.Fatalf("Tried to read from a saved file, got %q instead", err)
+	}
+
+	if !bytes.Equal(js, file) {
+		t.Errorf("Contents before and after save do not match")
+	}
+
 }

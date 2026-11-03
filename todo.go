@@ -1,6 +1,10 @@
 package todo
 
-import "time"
+import (
+	"encoding/json"
+	"os"
+	"time"
+)
 
 type item struct {
 	Task        string
@@ -33,4 +37,13 @@ func (l *List) Complete(i int) error {
 	list[i-1].CompletedAt = time.Now()
 
 	return nil
+}
+
+func (l *List) Save(filename string) error {
+	js, err := json.Marshal(l)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(filename, js, 0644)
 }
