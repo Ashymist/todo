@@ -57,3 +57,16 @@ func (l *List) Delete(i int) error {
 	*l = append(list[:i-1], list[i:]...)
 	return nil
 }
+
+func (l *List) Get(filename string) error {
+	file, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+
+	if len(file) == 0 {
+		return nil
+	}
+
+	return json.Unmarshal(file, l)
+}

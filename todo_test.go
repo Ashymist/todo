@@ -1,10 +1,12 @@
-package todo
+package todo_test
 
 import (
 	"bytes"
 	"encoding/json"
 	"os"
 	"testing"
+
+	. "github.com/Ashymist/todo"
 )
 
 func TestAdd(t *testing.T) {
@@ -78,4 +80,18 @@ func TestDeleteInMiddle(t *testing.T) {
 	if list[0].Task != "task1" && list[1].Task != "task3" {
 		t.Fatalf("Expected [task1,task3] after deletion, got [%q,%q] instead", list[0].Task, list[1].Task)
 	}
+}
+
+func TestGet(t *testing.T) {
+	list := List{}
+	if err := list.Get("tasks.json"); err != nil {
+		t.Fatalf("Tried to get tasks from file, got %q instead", err.Error())
+	}
+	if len(list) == 0 {
+		t.Errorf("List should not be empty")
+	}
+	if list[0].Task != "take out garbage" {
+		t.Errorf("Contents of file and list do not match after importing")
+	}
+
 }
