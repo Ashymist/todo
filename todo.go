@@ -47,3 +47,13 @@ func (l *List) Save(filename string) error {
 
 	return os.WriteFile(filename, js, 0644)
 }
+
+func (l *List) Delete(i int) error {
+	if i <= 0 || i > len(*l) {
+		return &ItemDoesntExist{ItemId: i}
+	}
+
+	list := *l
+	*l = append(list[:i-1], list[i:]...)
+	return nil
+}

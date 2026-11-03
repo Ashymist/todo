@@ -60,3 +60,22 @@ func TestSave(t *testing.T) {
 	}
 
 }
+
+func TestDeleteInMiddle(t *testing.T) {
+	list := List{}
+	list.Add("task1")
+	list.Add("task2")
+	list.Add("task3")
+
+	if err := list.Delete(2); err != nil {
+		t.Fatalf("Tried to delete task, got %q", err.Error())
+	}
+
+	if len(list) != 2 {
+		t.Fatalf("Expected length 2 after deletion, got %v instead", len(list))
+	}
+
+	if list[0].Task != "task1" && list[1].Task != "task3" {
+		t.Fatalf("Expected [task1,task3] after deletion, got [%q,%q] instead", list[0].Task, list[1].Task)
+	}
+}
