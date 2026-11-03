@@ -14,3 +14,19 @@ func TestAdd(t *testing.T) {
 	}
 
 }
+
+func TestComplete(t *testing.T) {
+	list := List{}
+	task := "take out garbage"
+	list.Add(task)
+	if list[0].Done {
+		t.Errorf("Task should not be done")
+	}
+	err := list.Complete(1)
+	if err != nil {
+		t.Errorf("Expected nil, got %v", err)
+	}
+	if !list[0].Done {
+		t.Errorf("Task should be done")
+	}
+}

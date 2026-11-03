@@ -21,3 +21,16 @@ func (l *List) Add(task string) {
 
 	*l = append(*l, t)
 }
+
+func (l *List) Complete(i int) error {
+
+	if i <= 0 || i > len(*l) {
+		return &ItemDoesntExist{ItemId: i}
+	}
+
+	list := *l
+	list[i-1].Done = true
+	list[i-1].CompletedAt = time.Now()
+
+	return nil
+}
